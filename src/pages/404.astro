@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+---
+
+<BaseLayout
+  lang="pt"
+  title="Página não encontrada — SMData"
+  description="A página que você procura não existe ou mudou de endereço."
+  path="/404.html"
+  alternatePath="/404.html"
+  ogImage="/og/pt/empresa.png"
+  ogAlt="SMData"
+>
+  <section class="page-hero">
+    <div class="container">
+      <span class="eyebrow">Erro 404 · Page not found</span>
+      <h1>Página não encontrada.</h1>
+      <p class="lead">
+        O endereço pode ter mudado ou não existe. The address may have changed or does not exist.
+      </p>
+      <div class="action-row" style="margin-top: 28px">
+        <a class="button button-dark" href="/pt/">Voltar ao início <Icon name="arrow" size={15} /></a>
+        <a class="button button-outline" href="/pt/produtos/">Ver produtos</a>
+        <a class="button button-outline" href="/en/">English home</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

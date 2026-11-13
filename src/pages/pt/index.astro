@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import HomePage from '../../components/pages/HomePage.astro';
+import { home, routes } from '../../data/content';
+
+const page = home.pt;
+---
+
+<BaseLayout
+  lang="pt"
+  title={page.meta.title}
+  description={page.meta.description}
+  path={routes.pt.home}
+  alternatePath={routes.en.home}
+  ogImage="/og/pt/home.png"
+  ogAlt={page.meta.ogAlt}
+>
+  <HomePage lang="pt" />
+</BaseLayout>

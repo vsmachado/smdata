@@ -1,0 +1,187 @@
+---
+import { Image } from 'astro:assets';
+import Icon from '../Icon.astro';
+import ProductRow from '../ProductRow.astro';
+import ContactCta from '../ContactCta.astro';
+import ServicesSection from '../ServicesSection.astro';
+import { home, aboutPage, servicesDetail, routes, type Lang } from '../../data/content';
+import library from '../../assets/screenshots/arcadea/library.png';
+import splash from '../../assets/efinancas/splash_art.png';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const page = home[lang];
+
+const alts =
+  lang === 'pt'
+    ? {
+        library: 'Biblioteca do Arcadea no desktop, com jogos de várias lojas',
+        splash: 'Arte de abertura do eFinanças | Caixinhas'
+      }
+    : {
+        library: 'Arcadea desktop library with games from several stores',
+        splash: 'eFinanças | Caixinhas splash artwork'
+      };
+---
+
+<section class="hero-home">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow">{page.hero.eyebrow}</span>
+      <h1 class="hero-title">{page.hero.title}</h1>
+      <p class="hero-lead">{page.hero.lead}</p>
+
+      <div class="hero-links">
+        <a class="button button-dark" href={routes[lang].products}>
+          {page.hero.primary} <Icon name="arrow" size={15} />
+        </a>
+        <a class="text-link" href={routes[lang].about}>
+          {page.hero.secondary} <Icon name="arrow" size={14} />
+        </a>
+      </div>
+
+      <div class="hero-meta"><span>Arcadea</span><span>eFinanças</span></div>
+    </div>
+
+    <div class="hero-visual reveal reveal-delay">
+      <span class="stack-label stack-label-arcadea">{page.visual.arcadeaLabel}</span>
+
+      <div class="stack-window">
+        <div class="app-window-bar">
+          <i class="app-window-dot"></i>
+          <i class="app-window-dot"></i>
+          <i class="app-window-dot"></i>
+          <span class="app-window-title">Arcadea</span>
+        </div>
+        <Image
+          src={library}
+          alt={alts.library}
+          widths={[480, 760, 1100]}
+          sizes="(max-width: 1080px) 88vw, 46vw"
+          format="webp"
+          quality={82}
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+
+      <div class="stack-phone">
+        <div class="phone-frame">
+          <span class="phone-speaker"></span>
+          <Image
+            src={splash}
+            alt={alts.splash}
+            widths={[220, 320, 440]}
+            sizes="(max-width: 680px) 116px, 152px"
+            format="webp"
+            quality={80}
+          />
+        </div>
+      </div>
+
+      <span class="stack-label stack-label-efinancas">{page.visual.efinancasLabel}</span>
+    </div>
+  </div>
+  <div class="container">
+    <p class="hero-caption">{page.visual.caption}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container about-split reveal">
+    <div class="about-copy">
+      <span class="eyebrow">{page.about.kicker}</span>
+      <h2>{page.about.title}</h2>
+      {page.about.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      <a class="text-link" href={routes[lang].about}>{page.about.link} <Icon name="arrow" size={14} /></a>
+    </div>
+
+    <aside class="about-side">
+      <p class="side-label">{page.about.sideLabel}</p>
+      <ul class="side-list">
+        {
+          page.about.side.map((item) => (
+            <li>
+              <span>{item.label}</span>
+              <strong>{item.value}</strong>
+            </li>
+          ))
+        }
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">{aboutPage[lang].services.kicker}</span>
+      <h2>{aboutPage[lang].services.title}</h2>
+    </div>
+
+    <div class="value-grid reveal">
+      {
+        aboutPage[lang].services.items.map((item) => (
+          <article class="value-item">
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">{page.principles.kicker}</span>
+      <h2>{page.principles.title}</h2>
+      <p>{page.principles.lead}</p>
+    </div>
+
+    <div class="principles reveal">
+      {
+        page.principles.items.map((item, index) => (
+          <article class="principle">
+            <span class="principle-index">0{index + 1}</span>
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<ServicesSection lang={lang} data={servicesDetail[lang]} />
+
+<section class="section" id="produtos">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">{page.products.kicker}</span>
+      <h2>{page.products.title}</h2>
+      <p>{page.products.lead}</p>
+    </div>
+
+    <div class="product-shelf">
+      <ProductRow {...page.products.items[0]} media="arcadea" />
+      <ProductRow {...page.products.items[1]} media="efinancas" reverse />
+    </div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container">
+    <ContactCta
+      lang={lang}
+      kicker={page.contact.kicker}
+      title={page.contact.title}
+      text={page.contact.text}
+      cta={page.contact.cta}
+    />
+  </div>
+</section>

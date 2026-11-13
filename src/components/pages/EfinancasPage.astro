@@ -1,0 +1,228 @@
+---
+import Icon from '../Icon.astro';
+import PhoneMockup from '../PhoneMockup.astro';
+import { efinancasPage, routes, site, ui, type Lang } from '../../data/content';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const page = efinancasPage[lang];
+const t = ui[lang];
+const mailSubject = encodeURIComponent(`${page.hero.name} — SMData`);
+---
+
+<section class="product-hero">
+  <div class="container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href={routes[lang].home}>{page.breadcrumb[0]}</a>
+      <span class="sep">/</span>
+      <a href={routes[lang].products}>{page.breadcrumb[1]}</a>
+      <span class="sep">/</span>
+      <span>{page.breadcrumb[2]}</span>
+    </nav>
+
+    <div class="product-hero-grid">
+      <div class="product-hero-copy">
+        <div class="product-logo-row">
+          <img class="product-logo" src="/brand/efinancas-mark.png" alt="" width="42" height="42" />
+          <span class="eyebrow" style="margin-bottom: 0">{page.hero.kicker}</span>
+        </div>
+
+        <h1>
+          {page.hero.name.split(' | ')[0]}
+          {
+            page.hero.name.includes(' | ') && (
+              <>
+                <span class="title-sep" aria-hidden="true"> | </span>
+                <span class="title-block">{page.hero.name.split(' | ').slice(1).join(' | ')}</span>
+              </>
+            )
+          }
+        </h1>
+        <p class="product-lead">{page.hero.lead}</p>
+        <p class="product-desc">{page.hero.description}</p>
+
+        <div class="product-status-line">
+          <span class="tag">{t.comingSoon}</span>
+          <span class="product-status">{page.hero.status}</span>
+        </div>
+
+        <div class="action-row">
+          <span class="button button-disabled" aria-disabled="true">{page.hero.primary}</span>
+          <a class="button button-outline" href={`mailto:${site.email}?subject=${mailSubject}`}>
+            {page.hero.secondary} <Icon name="mail" size={15} />
+          </a>
+        </div>
+
+        <div class="product-meta">
+          {
+            page.hero.meta.map((item) => (
+              <div>
+                <span class="meta-label">{item.label}</span>
+                <span class="meta-value">{item.value}</span>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="product-hero-visual">
+        <div class="fin-stage reveal reveal-delay">
+          <div class="fin-phone-wrap primary">
+            <PhoneMockup lang={lang} screen="home" />
+            <span class="fin-phone-label">{lang === 'pt' ? 'Início' : 'Home'}</span>
+          </div>
+          <div class="fin-phone-wrap secondary">
+            <PhoneMockup lang={lang} screen="month" />
+            <span class="fin-phone-label">{lang === 'pt' ? 'Mês' : 'Month'}</span>
+          </div>
+        </div>
+        <p class="concept-note">{t.conceptual}.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container">
+    <div class="problem">
+      <div>
+        <span class="eyebrow">{page.problem.kicker}</span>
+        <blockquote>{page.problem.quote}</blockquote>
+      </div>
+      <p>{page.problem.text}</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">{page.how.kicker}</span>
+      <h2>{page.how.title}</h2>
+    </div>
+
+    <div class="steps reveal">
+      {
+        page.how.steps.map((step, index) => (
+          <article class="step">
+            <span class="step-index">{index + 1}</span>
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section section-rule">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">{page.features.kicker}</span>
+      <h2>{page.features.title}</h2>
+      <p>{page.features.lead}</p>
+    </div>
+
+    <div class="feature-grid reveal">
+      {
+        page.features.items.map((item, index) => (
+          <article class="feature-item">
+            <span class="feature-number">{String(index + 1).padStart(2, '0')}</span>
+            <div>
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">{page.highlights.kicker}</span>
+    </div>
+
+    <div class="highlight-grid">
+      {
+        page.highlights.items.map((item) => (
+          <article class="highlight reveal">
+            <span class="highlight-label">{item.label}</span>
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="dark-panel reveal">
+      <span class="eyebrow">{page.privacy.kicker}</span>
+      <h2>{page.privacy.title}</h2>
+      <p>{page.privacy.text}</p>
+
+      <div class="privacy-grid">
+        {
+          page.privacy.items.map((item) => (
+            <article class="privacy-item">
+              <h3>{item.title}</h3>
+              <p>{item.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">{page.availability.kicker}</span>
+      <h2>{page.availability.title}</h2>
+    </div>
+
+    <div class="availability">
+      {
+        page.availability.rows.map((row) => (
+          <div class="availability-row">
+            <span class="availability-platform">{row.platform}</span>
+            <span
+              class:list={[
+                'availability-state',
+                (row.state.toLowerCase().includes('desenvolvimento') ||
+                  row.state.toLowerCase().includes('development') ||
+                  row.state.toLowerCase().includes('não') ||
+                  row.state.toLowerCase().includes('not ')) &&
+                  'muted'
+              ]}
+            >
+              {row.state}
+            </span>
+          </div>
+        ))
+      }
+    </div>
+    <p class="availability-note">{page.availability.note}</p>
+    <p class="availability-note">{page.availability.disclaimer}</p>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container next-product">
+    <div>
+      <span class="next-label">{page.next.label}</span>
+      <a class="next-name" href={page.next.path}>{page.next.name} <Icon name="arrow" size={22} /></a>
+      <p class="next-text">{page.next.text}</p>
+    </div>
+    <a class="button button-outline" href={routes[lang].products}>{t.back}</a>
+  </div>
+</section>

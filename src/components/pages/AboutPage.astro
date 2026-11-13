@@ -1,0 +1,86 @@
+---
+import ContactCta from '../ContactCta.astro';
+import ServicesSection from '../ServicesSection.astro';
+import { aboutPage, servicesDetail, type Lang } from '../../data/content';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const page = aboutPage[lang];
+---
+
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow">{page.hero.kicker}</span>
+    <h1>{page.hero.title}</h1>
+    <p class="lead">{page.hero.lead}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container about-story">
+    <div class="section-head">
+      <span class="eyebrow">{page.story.kicker}</span>
+      <h2>{page.story.title}</h2>
+    </div>
+    <div class="statement reveal">
+      {page.story.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+    </div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">{page.values.kicker}</span>
+      <h2>{page.values.title}</h2>
+    </div>
+
+    <div class="value-grid reveal">
+      {
+        page.values.items.map((item) => (
+          <article class="value-item">
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<ServicesSection lang={lang} data={servicesDetail[lang]} />
+
+<section class="section-tight">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">{page.work.kicker}</span>
+      <h2>{page.work.title}</h2>
+    </div>
+
+    <div class="work-list reveal">
+      {
+        page.work.items.map((item) => (
+          <article class="work-item">
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container">
+    <ContactCta
+      lang={lang}
+      kicker={page.contact.kicker}
+      title={page.contact.title}
+      text={page.contact.text}
+      cta={page.contact.cta}
+    />
+  </div>
+</section>

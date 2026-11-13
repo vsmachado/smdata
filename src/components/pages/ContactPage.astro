@@ -1,0 +1,58 @@
+---
+import Icon from '../Icon.astro';
+import { contactPage, site, type Lang } from '../../data/content';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const page = contactPage[lang];
+const writeLabel = lang === 'pt' ? 'Escrever e-mail' : 'Write email';
+---
+
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow">{page.hero.kicker}</span>
+    <h1>{page.hero.title}</h1>
+    <p class="lead">{page.hero.lead}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="email-card reveal">
+      <div>
+        <span class="email-card-label">{page.emailBlock.label}</span>
+        <a class="email-card-address" href={`mailto:${site.email}`}>{site.email}</a>
+      </div>
+      <a class="button button-dark" href={`mailto:${site.email}`}>
+        {page.emailBlock.cta} <Icon name="mail" size={15} />
+      </a>
+      <p class="email-card-note">{page.emailBlock.note}</p>
+    </div>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">{page.subjects.kicker}</span>
+    </div>
+
+    <div class="subject-grid">
+      {
+        page.subjects.items.map((item) => (
+          <a
+            class="subject-card reveal"
+            href={`mailto:${site.email}?subject=${encodeURIComponent(item.subject)}`}
+          >
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+            <span class="product-link">{writeLabel} <Icon name="arrow" size={14} /></span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,26 @@
+---
+import Icon from './Icon.astro';
+import { routes, site, type Lang } from '../data/content';
+
+interface Props {
+  lang: Lang;
+  kicker: string;
+  title: string;
+  text: string;
+  cta: string;
+}
+
+const { lang, kicker, title, text, cta } = Astro.props;
+---
+
+<div class="contact-panel reveal">
+  <div>
+    <span class="eyebrow">{kicker}</span>
+    <h2>{title}</h2>
+    <p>{text}</p>
+  </div>
+  <div class="contact-actions">
+    <a class="email-link" href={`mailto:${site.email}`}>{site.email} <Icon name="arrow-up-right" size={15} /></a>
+    <a class="button button-light button-sm" href={routes[lang].contact}>{cta}</a>
+  </div>
+</div>

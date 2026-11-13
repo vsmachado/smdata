@@ -1,0 +1,35 @@
+---
+import ProductRow from '../ProductRow.astro';
+import { products, type Lang } from '../../data/content';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const page = products[lang];
+---
+
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow">{page.hero.kicker}</span>
+    <h1>{page.hero.title}</h1>
+    <p class="lead">{page.hero.lead}</p>
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container product-shelf">
+    <ProductRow {...page.arcadea} media="arcadea" />
+    <ProductRow {...page.efinancas} media="efinancas" reverse />
+  </div>
+</section>
+
+<section class="section-tight">
+  <div class="container">
+    <div class="closing-note reveal">
+      <h2>{page.closing.title}</h2>
+      <p>{page.closing.text}</p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,30 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import EfinancasPage from '../../../components/pages/EfinancasPage.astro';
+import { efinancasPage, routes } from '../../../data/content';
+
+const page = efinancasPage.en;
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'eFinanças | Caixinhas',
+  applicationCategory: 'FinanceApplication',
+  operatingSystem: 'Android, Windows',
+  description: page.meta.description,
+  url: `https://smdata.net${routes.en.efinancas}`,
+  inLanguage: 'en'
+};
+---
+
+<BaseLayout
+  lang="en"
+  title={page.meta.title}
+  description={page.meta.description}
+  path={routes.en.efinancas}
+  alternatePath={routes.pt.efinancas}
+  ogImage="/og/en/efinancas.png"
+  ogAlt={page.meta.ogAlt}
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(schema)} />
+  <EfinancasPage lang="en" />
+</BaseLayout>

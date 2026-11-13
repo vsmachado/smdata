@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import AboutPage from '../../components/pages/AboutPage.astro';
+import { aboutPage, routes } from '../../data/content';
+
+const page = aboutPage.pt;
+---
+
+<BaseLayout
+  lang="pt"
+  title={page.meta.title}
+  description={page.meta.description}
+  path={routes.pt.about}
+  alternatePath={routes.en.about}
+  ogImage="/og/pt/empresa.png"
+  ogAlt={page.meta.ogAlt}
+>
+  <AboutPage lang="pt" />
+</BaseLayout>

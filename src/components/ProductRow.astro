@@ -1,0 +1,85 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import library from '../assets/screenshots/arcadea/library.png';
+import splash from '../assets/efinancas/splash_art.png';
+
+interface Props {
+  index: string;
+  name: string;
+  kind: string;
+  status: string;
+  description: string;
+  link: string;
+  path: string;
+  media: 'arcadea' | 'efinancas';
+  reverse?: boolean;
+  highlights?: readonly string[];
+}
+
+const { index, name, kind, status, description, link, path, media, reverse = false, highlights } =
+  Astro.props;
+---
+
+<article class:list={['product-card', 'reveal', reverse && 'reverse']}>
+  <div class="product-body">
+    <span class="product-index">{index} / 02</span>
+    <span class="product-kind">{kind}</span>
+    <h3 class="product-name">{name}</h3>
+    <span class="product-status">{status}</span>
+    <p class="product-desc">{description}</p>
+
+    {
+      highlights && (
+        <ul class="highlight-tags">
+          {highlights.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      )
+    }
+
+    <a class="product-link" href={path}>{link} <Icon name="arrow" size={15} /></a>
+  </div>
+
+  <div class:list={['product-media', media === 'arcadea' ? 'media-arcadea' : 'media-efinancas']}>
+    {
+      media === 'arcadea' ? (
+        <div class="media-frame">
+          <div class="app-window-bar">
+            <i class="app-window-dot" />
+            <i class="app-window-dot" />
+            <i class="app-window-dot" />
+            <span class="app-window-title">Arcadea</span>
+          </div>
+          <Image
+            src={library}
+            alt="Biblioteca do Arcadea com jogos de várias lojas"
+            widths={[520, 820, 1100]}
+            sizes="(max-width: 1080px) 88vw, 50vw"
+            format="webp"
+            quality={82}
+          />
+        </div>
+      ) : (
+        <>
+          <span class="media-badge">
+            <img src="/brand/efinancas-mark.png" alt="" width="17" height="17" />
+            eFinanças | Caixinhas
+          </span>
+          <div class="phone-frame">
+            <span class="phone-speaker" />
+            <Image
+              src={splash}
+              alt="Arte de abertura do eFinanças | Caixinhas"
+              widths={[240, 360, 480]}
+              sizes="(max-width: 1080px) 200px, 224px"
+              format="webp"
+              quality={80}
+            />
+          </div>
+        </>
+      )
+    }
+  </div>
+</article>

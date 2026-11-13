@@ -1,0 +1,183 @@
+---
+import Icon from './Icon.astro';
+import type { Lang } from '../data/content';
+
+interface Props {
+  lang: Lang;
+  screen?: 'home' | 'month';
+}
+
+const { lang, screen = 'home' } = Astro.props;
+
+const copy =
+  lang === 'pt'
+    ? {
+        ariaHome: 'Prévia da tela Início do eFinanças',
+        ariaMonth: 'Prévia da tela Mês do eFinanças',
+        time: '13:44',
+        network: '5G',
+        battery: '71',
+        home: 'Início',
+        expenses: 'Despesas',
+        month: 'Mês',
+        boxes: 'Caixinhas',
+        settings: 'Config.',
+        balanceLabel: 'Saldo real do mês',
+        spending: 'Saldo para gastos',
+        allocated: 'Alocado em caixinhas',
+        used: 'Utilizado das caixinhas',
+        planned: 'Saldo planejado',
+        expected: 'Saldo esperado',
+        add: '+ Registrar despesa',
+        boxesMonth: 'Caixinhas do mês',
+        day: 'Dia',
+        week: 'Semana',
+        spent: 'Gasto',
+        of: 'de',
+        see: 'Ver despesas',
+        monthBoxes: 'Caixinhas',
+        subscriptions: 'Assinaturas',
+        weekExpenses: 'Despesas da Semana',
+        misc: 'Diversos',
+        weekend: 'Final de Semana',
+        plannedShort: 'Planejado',
+        executed: 'Executado'
+      }
+    : {
+        ariaHome: 'Preview of the eFinanças home screen',
+        ariaMonth: 'Preview of the eFinanças month screen',
+        time: '13:44',
+        network: '5G',
+        battery: '71',
+        home: 'Home',
+        expenses: 'Expenses',
+        month: 'Month',
+        boxes: 'Boxes',
+        settings: 'Settings',
+        balanceLabel: 'Actual monthly balance',
+        spending: 'Available to spend',
+        allocated: 'Allocated to boxes',
+        used: 'Used from boxes',
+        planned: 'Planned balance',
+        expected: 'Expected balance',
+        add: '+ Add expense',
+        boxesMonth: 'Boxes this month',
+        day: 'Day',
+        week: 'Week',
+        spent: 'Spent',
+        of: 'of',
+        see: 'View expenses',
+        monthBoxes: 'Boxes',
+        subscriptions: 'Subscriptions',
+        weekExpenses: 'Week expenses',
+        misc: 'Misc',
+        weekend: 'Weekend',
+        plannedShort: 'Planned',
+        executed: 'Spent'
+      };
+---
+
+<div class="fin-phone" role="img" aria-label={screen === 'home' ? copy.ariaHome : copy.ariaMonth}>
+  <div class="fin-app">
+    <div class="fin-status">
+      <span>{copy.time}</span>
+      <span class="fin-status-right">
+        <span>{copy.network}</span>
+        <i></i>
+        <span>{copy.battery}</span>
+      </span>
+    </div>
+
+    <div class="fin-appbar">{screen === 'home' ? copy.home : copy.month}</div>
+
+    <div class="fin-body">
+      {
+        screen === 'home' ? (
+          <>
+            <div class="fin-balance-card">
+              <div class="fin-balance-label">{copy.balanceLabel} <i>i</i></div>
+              <div class="fin-balance-value">R$ 1.240,00</div>
+
+              <div class="fin-divider"></div>
+              <div class="fin-row"><span>{copy.spending}</span><strong>R$ 3.000,00</strong></div>
+              <div class="fin-row"><span>{copy.allocated}</span><strong>R$ 2.500,00</strong></div>
+              <div class="fin-row"><span>{copy.used}</span><strong>R$ 740,00</strong></div>
+
+              <div class="fin-divider"></div>
+              <div class="fin-row positive"><span>{copy.planned}</span><strong>+R$ 180,00</strong></div>
+              <div class="fin-row positive"><span>{copy.expected}</span><strong>+R$ 260,00</strong></div>
+            </div>
+
+            <div class="fin-add">{copy.add}</div>
+
+            <div class="fin-section-label">{copy.boxesMonth}</div>
+
+            <div class="fin-box-card">
+              <div class="fin-box-head"><strong>{copy.day}</strong><span>+R$ 32,00</span></div>
+              <div class="fin-progress"><i style="width: 60%"></i></div>
+              <div class="fin-box-meta">{copy.spent} R$ 48,00 {copy.of} R$ 80,00</div>
+              <div class="fin-box-link"><span>{copy.see}</span><span>▾</span></div>
+            </div>
+
+            <div class="fin-box-card">
+              <div class="fin-box-head"><strong>{copy.week}</strong><span>+R$ 140,00</span></div>
+              <div class="fin-progress"><i style="width: 45%"></i></div>
+              <div class="fin-box-meta">{copy.spent} R$ 210,00 {copy.of} R$ 350,00</div>
+              <div class="fin-box-link"><span>{copy.see}</span><span>▾</span></div>
+            </div>
+          </>
+        ) : (
+          <>
+            <div class="fin-section-label">{copy.monthBoxes}</div>
+
+            <div class="fin-month-card">
+              <div class="fin-month-head"><strong>{copy.subscriptions}</strong><span>+R$ 26,65</span></div>
+              <div class="fin-month-row"><span>{copy.plannedShort}</span><strong>R$ 120,00</strong></div>
+              <div class="fin-month-row"><span>{copy.executed}</span><strong>R$ 93,35</strong></div>
+              <div class="fin-box-link"><span>{copy.see}</span><span>▾</span></div>
+            </div>
+
+            <div class="fin-month-card">
+              <div class="fin-month-head"><strong>{copy.weekExpenses}</strong><span>+R$ 420,00</span></div>
+              <div class="fin-month-row"><span>{copy.plannedShort}</span><strong>R$ 620,00</strong></div>
+              <div class="fin-month-row"><span>{copy.executed}</span><strong>R$ 200,00</strong></div>
+              <div class="fin-box-link"><span>{copy.see}</span><span>▾</span></div>
+            </div>
+
+            <div class="fin-month-card">
+              <div class="fin-month-head"><strong>{copy.misc}</strong><span>+R$ 160,00</span></div>
+              <div class="fin-month-row"><span>{copy.plannedShort}</span><strong>R$ 240,00</strong></div>
+              <div class="fin-month-row"><span>{copy.executed}</span><strong>R$ 80,00</strong></div>
+              <div class="fin-box-link"><span>{copy.see}</span><span>▾</span></div>
+            </div>
+
+            <div class="fin-month-card">
+              <div class="fin-month-head"><strong>{copy.weekend}</strong><span>+R$ 90,00</span></div>
+              <div class="fin-month-row"><span>{copy.plannedShort}</span><strong>R$ 150,00</strong></div>
+              <div class="fin-month-row"><span>{copy.executed}</span><strong>R$ 60,00</strong></div>
+              <div class="fin-box-link"><span>{copy.see}</span><span>▾</span></div>
+            </div>
+          </>
+        )
+      }
+    </div>
+
+    <nav class="fin-nav" aria-hidden="true">
+      <span class:list={['fin-nav-item', screen === 'home' && 'active']}>
+        <Icon name="home" size={12} />{copy.home}
+      </span>
+      <span class="fin-nav-item">
+        <Icon name="receipt" size={12} />{copy.expenses}
+      </span>
+      <span class:list={['fin-nav-item', screen === 'month' && 'active']}>
+        <Icon name="calendar" size={12} />{copy.month}
+      </span>
+      <span class="fin-nav-item">
+        <Icon name="box" size={12} />{copy.boxes}
+      </span>
+      <span class="fin-nav-item">
+        <Icon name="settings" size={12} />{copy.settings}
+      </span>
+    </nav>
+  </div>
+</div>

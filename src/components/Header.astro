@@ -1,0 +1,96 @@
+---
+import { nav, routes, ui, type Lang } from '../data/content';
+
+interface Props {
+  lang: Lang;
+  path: string;
+  alternatePath: string;
+}
+
+const { lang, path, alternatePath } = Astro.props;
+const t = ui[lang];
+const items = nav[lang];
+
+const isActive = (href: string) => {
+  if (href === routes[lang].home) return path === href;
+  return path.startsWith(href);
+};
+---
+
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href={routes[lang].home}>
+      <img class="brand-mark" src="/brand/smdata-mark.png" alt="" width="40" height="40" />
+      <span>
+        <span class="brand-word">SMData</span>
+        <span class="brand-sub">{t.brandSub}</span>
+      </span>
+    </a>
+
+    <nav class="nav-links" id="primary-nav" aria-label={t.footerNav}>
+      {
+        items.map((item) => (
+          <a
+            href={item.path}
+            aria-current={isActive(item.path) ? 'page' : undefined}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="nav-actions">
+      <a
+        class="lang-link"
+        href={alternatePath}
+        hreflang={lang === 'pt' ? 'en' : 'pt-BR'}
+        aria-label={`${t.switchLabel} — ${t.switchAria}`}
+      >
+        {t.switchLabel}
+      </a>
+      <a class="button button-dark nav-cta" href={routes[lang].contact}>{t.contactCta}</a>
+      <button
+        class="nav-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="primary-nav"
+        aria-label={t.menu}
+      >
+        <span aria-hidden="true"><i></i><i></i></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('.site-header');
+  const toggle = document.querySelector<HTMLButtonElement>('.nav-toggle');
+  const nav = document.getElementById('primary-nav');
+
+  const onScroll = () => {
+    header?.classList.toggle('scrolled', window.scrollY > 6);
+  };
+
+  const closeMenu = () => {
+    toggle?.setAttribute('aria-expanded', 'false');
+    nav?.classList.remove('open');
+  };
+
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  toggle?.addEventListener('click', () => {
+    const open = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!open));
+    nav?.classList.toggle('open', !open);
+  });
+
+  nav?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeMenu();
+  });
+</script>

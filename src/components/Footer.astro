@@ -1,0 +1,56 @@
+---
+import { nav, routes, site, ui, type Lang } from '../data/content';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = ui[lang];
+const year = new Date().getFullYear();
+const arcadeaLabel = lang === 'pt' ? 'Site do Arcadea' : 'Arcadea website';
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand" href={routes[lang].home}>
+          <img class="brand-mark" src="/brand/smdata-icon.png" alt="" width="44" height="44" />
+          <span>
+            <span class="brand-word">SMData</span>
+            <span class="brand-sub">{t.brandSub}</span>
+          </span>
+        </a>
+        <p class="footer-tagline">{t.footerTagline}</p>
+      </div>
+
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h3>{t.footerNav}</h3>
+          {nav[lang].map((item) => <a href={item.path}>{item.label}</a>)}
+        </div>
+        <div class="footer-col">
+          <h3>{t.footerProducts}</h3>
+          <a href={routes[lang].arcadea}>Arcadea</a>
+          <a href={routes[lang].efinancas}>eFinanças | Caixinhas</a>
+          <a href={site.arcadea.site} target="_blank" rel="noopener">{arcadeaLabel} ↗</a>
+        </div>
+        <div class="footer-col">
+          <h3>{t.footerContact}</h3>
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+          <a href={routes[lang].contact}>{t.contactCta}</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-legal">
+        <p>© {year} SMData. {t.rights}</p>
+        <p>{t.productNote}</p>
+        <p>{t.trademarks}</p>
+      </div>
+      <span class="footer-year">SMData · {year}</span>
+    </div>
+  </div>
+</footer>

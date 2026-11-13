@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactPage from '../../components/pages/ContactPage.astro';
+import { contactPage, routes } from '../../data/content';
+
+const page = contactPage.pt;
+---
+
+<BaseLayout
+  lang="pt"
+  title={page.meta.title}
+  description={page.meta.description}
+  path={routes.pt.contact}
+  alternatePath={routes.en.contact}
+  ogImage="/og/pt/empresa.png"
+  ogAlt={page.meta.ogAlt}
+>
+  <ContactPage lang="pt" />
+</BaseLayout>
