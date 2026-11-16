@@ -1,0 +1,8 @@
+name = "smdata-www"
+main = "workers/www.js"
+compatibility_date = "2026-10-31"
+workers_dev = false
+
+routes = [
+  { pattern = "www.smdata.net", custom_domain = true }
+]

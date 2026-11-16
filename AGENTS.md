@@ -5,14 +5,15 @@ Este repositório contém o site institucional PT/EN da SMData. Ele é um projet
 ## Onde está hospedado
 
 - **Repositório:** https://github.com/vsmachado/smdata
-- **Produção:** https://smdata.net e https://www.smdata.net
+- **Produção:** https://smdata.net (`www` redireciona 301 para o apex)
 - **Worker Cloudflare:** `smdata-landing`
+- **Worker de redirect:** `smdata-www` (www → apex, 301)
 - **Preview do Worker:** https://smdata-landing.vsmachado.workers.dev
-- **Domínio:** `smdata.net` (zone já existente na Cloudflare; `www` também associado)
+- **Domínio:** `smdata.net` (zone já existente na Cloudflare; `www` associado ao worker de redirect)
 - **Modo de deploy:** Worker com assets estáticos (`dist`), **não** Pages
-- **Configuração:** `wrangler.toml` na raiz do repositório
+- **Configuração:** `wrangler.toml` (site) e `wrangler-www.toml` (redirect)
 
-O canonical do site aponta sempre para `https://smdata.net`; o `www` serve o mesmo conteúdo.
+O canonical do site aponta sempre para `https://smdata.net`; o `www` redireciona com 301 para o apex.
 
 ## Stack e ambiente
 
@@ -57,8 +58,10 @@ src/
   layouts/          layout base, SEO, hreflang e JSON-LD
   pages/            rotas /pt/ e /en/
   styles/global.css identidade visual
+workers/www.js      redirect 301 de www para o apex
 scripts/gen-assets.mjs  gera OG images, favicons e assets derivados
-wrangler.toml       Worker, assets e custom domains
+wrangler.toml       Worker principal, assets e custom domain apex
+wrangler-www.toml   Worker de redirect do www
 ```
 
 Rotas principais:
@@ -101,29 +104,47 @@ npm run build
 npx --yes wrangler@3.114.0 deploy -c wrangler.toml
 ```
 
-O `wrangler.toml` já configura:
+O `wrangler.toml` configura o Worker principal e o apex:
 
 ```toml
 name = "smdata-landing"
 compatibility_date = "2026-10-31"
 workers_dev = true
 routes = [
-  { pattern = "smdata.net", custom_domain = true },
-  { pattern = "www.smdata.net", custom_domain = true }
+  { pattern = "smdata.net", custom_domain = true }
 ]
 
 [assets]
 directory = "./dist"
 ```
 
+O `www` é um Worker separado que redireciona com 301 para o apex:
+
+```powershell
+npx --yes wrangler@3.114.0 deploy -c wrangler-www.toml
+```
+
+`wrangler-www.toml`:
+
+```toml
+name = "smdata-www"
+main = "workers/www.js"
+compatibility_date = "2026-10-31"
+workers_dev = false
+routes = [
+  { pattern = "www.smdata.net", custom_domain = true }
+]
+```
+
 Após o deploy, validar:
 
 ```powershell
 curl.exe -I https://smdata.net/pt/
+curl.exe -I https://www.smdata.net/pt/
 curl.exe -I https://smdata.net/brand/smdata-mark.png
 ```
 
-Verificar também `https://www.smdata.net/pt/`, canonical, OG images e downloads do Arcadea.
+O `www` deve responder **301** com `Location: https://smdata.net/pt/`. Verificar também canonical, OG images e downloads do Arcadea.
 
 ## Rollback
 
@@ -138,6 +159,17 @@ Voltar para uma versão anterior:
 ```powershell
 npx --yes wrangler@3.114.0 rollback <version-id> --name smdata-landing --yes
 ```
+
+## Indexação
+
+- Canônicas: `https://smdata.net/pt/` e `https://smdata.net/en/`.
+- `/` faz **301** para `/pt/` via `public/_redirects`.
+- URLs sem barra final (`/pt`, `/en/products/arcadea`, etc.) fazem **301** para a versão com barra.
+- `www.smdata.net` faz **301** para `smdata.net` via `smdata-www`.
+- `public/sitemap.xml` contém apenas URLs canônicas.
+- As tags `canonical` e `hreflang` são geradas no `BaseLayout.astro`.
+- No Google Search Console, enviar `https://smdata.net/sitemap.xml` e solicitar indexação das URLs canônicas em “Inspecionar URL”.
+- “Página alternativa com tag canônica adequada” e “Página com redirecionamento” são avisos esperados para variantes `www`, `/` e URLs sem barra final. Eles não bloqueiam a indexação das canônicas.
 
 ## Guardrails
 
@@ -164,6 +196,6 @@ npx --yes wrangler@3.114.0 rollback <version-id> --name smdata-landing --yes
 - Build estático com 14 páginas.
 - Lighthouse 100 em acessibilidade, boas práticas e SEO (local e produção).
 - Links locais verificados.
-- `smdata.net` e `www.smdata.net` respondendo com HTTPS.
+- `smdata.net` e `www.smdata.net` respondendo com HTTPS; `www` com redirect 301 para o apex.
 - Headers de segurança e cache aplicados via `public/_headers`.
 - Root redireciona para `/pt/` via `public/_redirects`.

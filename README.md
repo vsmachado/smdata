@@ -3,7 +3,7 @@
 Site corporativo da SMData, em português e inglês. Apresenta a empresa, os serviços de tecnologia e os dois produtos próprios: **Arcadea** e **eFinanças | Caixinhas**.
 
 - Repositório: **https://github.com/vsmachado/smdata**
-- Produção: **https://smdata.net** e **https://www.smdata.net**
+- Produção: **https://smdata.net** (`www` redireciona 301 para o apex)
 - Instruções para outra IA/agente: **[AGENTS.md](./AGENTS.md)**
 
 ## Stack
@@ -71,14 +71,17 @@ public/
   brand/            marca SMData, favicons, marcas dos produtos
   og/               imagens Open Graph PT/EN
 src/
-  assets/           screenshots do Arcadea, assets do eFinanças e foto de serviços
+  assets/           screenshots do Arcadea, assets do eFinanças, foto de serviços, logo
   components/       header, footer, ícones, mockup, cards
   components/pages/ páginas reutilizadas por PT e EN
   data/content.ts   todo o conteúdo editorial
   layouts/          layout base, SEO, hreflang, JSON-LD
   pages/            rotas /pt/ e /en/
   styles/global.css identidade visual
-scripts/gen-assets.mjs  gera OG images, favicons e marca do eFinanças
+workers/www.js      redirect 301 de www para o apex
+scripts/gen-assets.mjs  gera OG images, favicons e assets derivados
+wrangler.toml       Worker principal, assets e custom domain apex
+wrangler-www.toml   Worker de redirect do www
 ```
 
 Rotas:
@@ -107,7 +110,11 @@ Publicar como Worker com assets:
 npx --yes wrangler@3.114.0 deploy -c wrangler.toml
 ```
 
-O `wrangler.toml` configura os assets em `dist`, a data de compatibilidade e o custom domain `smdata.net`.
+O `wrangler.toml` configura os assets em `dist`, a data de compatibilidade e o custom domain `smdata.net`. O `www.smdata.net` é um Worker separado que faz **301** para o apex:
+
+```powershell
+npx --yes wrangler@3.114.0 deploy -c wrangler-www.toml
+```
 
 Alternativa via flags:
 
@@ -119,7 +126,17 @@ npx --yes wrangler@3.114.0 deploy `
   --keep-vars
 ```
 
-O domínio `smdata.net` e o `www.smdata.net` já estão na Cloudflare e associados ao Worker. O canonical continua apontando para `https://smdata.net`. Não alterar `arcadea-landing` nem `arcadea-admin`.
+O domínio `smdata.net` está na Cloudflare e associado ao Worker `smdata-landing`. O `www.smdata.net` está associado ao Worker `smdata-www` e redireciona com 301 para o apex. O canonical continua apontando para `https://smdata.net`. Não alterar `arcadea-landing` nem `arcadea-admin`.
+
+## Indexação
+
+- Canônicas: `https://smdata.net/pt/` e `https://smdata.net/en/`.
+- `/` faz **301** para `/pt/`.
+- URLs sem barra final (`/pt`, `/en/products/arcadea`, etc.) fazem **301** para a versão com barra.
+- `www.smdata.net` faz **301** para `smdata.net`.
+- `sitemap.xml` contém apenas URLs canônicas.
+- No Google Search Console, envie `https://smdata.net/sitemap.xml` e use “Inspecionar URL” para solicitar indexação das páginas canônicas.
+- Os avisos “Página alternativa com tag canônica adequada” e “Página com redirecionamento” são esperados para variantes `www`, `/` e URLs sem barra final; eles não bloqueiam a indexação das URLs canônicas.
 
 ## Observações
 

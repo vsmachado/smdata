@@ -3,8 +3,7 @@ compatibility_date = "2026-10-31"
 workers_dev = true
 
 routes = [
-  { pattern = "smdata.net", custom_domain = true },
-  { pattern = "www.smdata.net", custom_domain = true }
+  { pattern = "smdata.net", custom_domain = true }
 ]
 
 [assets]
